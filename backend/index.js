@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const fetch = require('node-fetch');
 
-// Express sunucusunu başlatıyoruz.
+// Express sunucusunu atıyoruz.
 const app = express();
 
 // Middleware - Gelen veriyi JSON formatında alabilmemizi sağlar.
@@ -49,11 +49,19 @@ app.get('/api/flights', async (req, res) => {
     res.json(flights);
 });
 
-// Schiphol API'den uçuşları almak için yeni bir GET endpoint
+
 app.get('/api/schiphol-flights', async (req, res) => {
+    const { scheduleDate, flightNumber } = req.query; // URL'deki parametreleri alıyoruz
+
+    // API isteği için URL oluşturma
+    let url = `https://api.schiphol.nl/public-flights/flights?scheduleDate=${scheduleDate}`;
+
+    if (flightNumber) {
+        url += `&flightNumber=${flightNumber}`;
+    }
+
     try {
-        // Schiphol API'ye istek gönderiyoruz
-        const response = await fetch('https://api.schiphol.nl/public-flights/flights', {
+        const apiResponse = await fetch(url, {
             headers: {
                 'app_id': '938aaf8b', // Schiphol API App ID'nizi buraya ekleyin
                 'app_key': '70bbf8a9ecbb19f14e1828981d511ea8', // Schiphol API Key'inizi buraya ekleyin
@@ -61,18 +69,17 @@ app.get('/api/schiphol-flights', async (req, res) => {
                 'Accept': 'application/json'
             }
         });
-
-        // Gelen yanıtı JSON olarak alıyoruz
-        const data = await response.json();
-
-        // API'den alınan uçuş verilerini frontend'e gönderiyoruz
-        res.json(data);
-
+        const data = await apiResponse.json();
+        res.status(200).json(data);
     } catch (error) {
-        console.error('Error fetching flights from Schiphol API:', error);
-        res.status(500).send('Schiphol API ile veri çekme işlemi sırasında bir hata oluştu.');
+        res.status(500).json({ error: 'Veri çekilirken bir hata oluştu.' });
     }
 });
+
+
+
+
+
 
 // Sunucuyu 5000 portunda çalıştırıyoruz
 app.listen(5000, () => console.log('Server is running on port 5000'));

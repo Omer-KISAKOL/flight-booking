@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css'
 import UserFlights from "./components/UserFlights.jsx";
 import FlightsSchiphol from "./components/FlightsSchiphol.jsx";
+import {Route, Routes} from "react-router-dom";
 
 function App() {
 
@@ -9,8 +10,10 @@ function App() {
 
   return (
       <>
-          <FlightsSchiphol/>
-          <UserFlights/>
+          <Routes>
+              <Route path="/" element={<FlightsSchiphol/>} />
+              <Route path="/Flights" element={<UserFlights/>} />
+          </Routes>
       </>
   )
 }

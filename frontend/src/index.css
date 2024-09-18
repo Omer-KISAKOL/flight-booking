@@ -1,0 +1,35 @@
+.flight-schiphol{
+    display: grid;
+    justify-content: center;
+}
+.flight-card{
+    display: flex;
+    border: 2px solid gray;
+}
+.flight-list{
+    padding-bottom: 20px;
+}
+.flight-card p{
+    display: grid;
+    margin-right: 10px;
+}
+.flight-card p strong{
+    margin-bottom: 10px;
+}
+.selected-flight-card{
+    display: grid;
+    margin-bottom: 50px;
+    justify-content: center;
+}
+.flight-filter{
+    display: flex;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    justify-content: center;
+}
+.link{
+    padding:10px 20px 10px 20px;
+    text-decoration:none;
+    color:#000;
+    border:1px solid black;
+}
