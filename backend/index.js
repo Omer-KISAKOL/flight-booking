@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const fetch = require('node-fetch');
 
 // Express sunucusunu başlatıyoruz.
 const app = express();
@@ -46,6 +47,31 @@ app.post('/api/flights', async (req, res) => {
 app.get('/api/flights', async (req, res) => {
     const flights = await Flight.find();
     res.json(flights);
+});
+
+// Schiphol API'den uçuşları almak için yeni bir GET endpoint
+app.get('/api/schiphol-flights', async (req, res) => {
+    try {
+        // Schiphol API'ye istek gönderiyoruz
+        const response = await fetch('https://api.schiphol.nl/public-flights/flights', {
+            headers: {
+                'app_id': '938aaf8b', // Schiphol API App ID'nizi buraya ekleyin
+                'app_key': '70bbf8a9ecbb19f14e1828981d511ea8', // Schiphol API Key'inizi buraya ekleyin
+                'ResourceVersion': 'v4',
+                'Accept': 'application/json'
+            }
+        });
+
+        // Gelen yanıtı JSON olarak alıyoruz
+        const data = await response.json();
+
+        // API'den alınan uçuş verilerini frontend'e gönderiyoruz
+        res.json(data);
+
+    } catch (error) {
+        console.error('Error fetching flights from Schiphol API:', error);
+        res.status(500).send('Schiphol API ile veri çekme işlemi sırasında bir hata oluştu.');
+    }
 });
 
 // Sunucuyu 5000 portunda çalıştırıyoruz
