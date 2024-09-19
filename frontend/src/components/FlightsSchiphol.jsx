@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState , useEffect } from 'react';
 import {Link} from "react-router-dom";
+import {IataData} from "../IataData.jsx";
 import "../index.css"
 
 const FlightsSchiphol = () => {
@@ -8,6 +9,7 @@ const FlightsSchiphol = () => {
     const [selectedDate, setSelectedDate] = useState('');
     const [flightNumber, setFlightNumber] = useState('');
     const [message, setMessage] = useState('');
+
 
     const handleDateChange = (event) => {
         setSelectedDate(event.target.value);
@@ -36,10 +38,6 @@ const FlightsSchiphol = () => {
 
     };
 
-
-    // if (selectedDate === '' || selectedDate === null || selectedDate === undefined) {
-    //
-    // }
     const handleFlightSubmit = async () => {
         try {
             // Seçilen uçuşu backend'e POST ediyoruz
@@ -59,6 +57,23 @@ const FlightsSchiphol = () => {
         }
     };
 
+
+    const getLocationFromCode = (code) => {
+        const entry = IataData.find(item => item.code === code);
+        return entry ? entry.location : code; // Eğer eşleşme bulunmazsa, kodu olduğu gibi yazdır
+    };
+
+    // IATA koduna göre varış şehir ve ülkesini döndüren fonksiyon
+    const getRouteInfo = (destinations) => {
+
+        const transferAirport = destinations.length > 1 ? getLocationFromCode(destinations[0]) : null;
+
+        const finalDestinationCode = destinations[destinations.length - 1];
+        const finalDestination = getLocationFromCode(finalDestinationCode);
+
+        return { transferAirport, finalDestination };
+    };
+
     return (
         <div className="flight-schiphol">
             <h1>Schiphol Uçuşları</h1>
@@ -66,8 +81,6 @@ const FlightsSchiphol = () => {
             <div className="flight-schiphol">
                 <Link className="link" to="/Flights">Flights</Link>
             </div>
-
-
 
             <form onSubmit={handleFilterSubmit} className="flight-filter">
                 <div>
@@ -95,33 +108,47 @@ const FlightsSchiphol = () => {
             </form>
 
             {flight.length > 0 ?(
-                flight.map((flight, index) => (
+                flight.map((flight, index) => {
+
+                    const destinations = flight.route.destinations;
+
+                    // getRouteInfo fonksiyonunu kullanarak varış şehir ve ülkesini alıyor
+                    const { transferAirport, finalDestination } = getRouteInfo(destinations);
+
+                    return (
                         <div className="flight-list">
                             <div key={index} className="flight-card">
-                                <h3>Flight Number: {flight.flightNumber}</h3>
-                                <p><strong>Flight Name:</strong> {flight.flightName}</p>
-                                <p><strong>Airline Code:</strong> {flight.airlineCode}</p>
-                                {/*<p><strong>Aircraft Type:</strong> {flight.aircraftType.iataMain} ({flight.aircraftType.iataSub})</p>*/}
-                                <p><strong>Is Operational Flight:</strong> {flight.isOperationalFlight ? 'Yes' : 'No'}
-                                </p>
-                                <p><strong>Schedule Date:</strong> {new Date(flight.scheduleDateTime).toLocaleString()}
-                                </p>
+                                <p><strong>Flight Number:</strong> {flight.flightNumber}</p>
+                                {/*<p><strong>Flight Name:</strong> {flight.flightName}</p>*/}
+                                {/*<p><strong>Airline Code:</strong> {flight.airlineCode}</p>*/}
+                                {/*<p><strong>Aircraft*/}
+                                {/*    Type:</strong> {flight.aircraftType.iataMain} ({flight.aircraftType.iataSub})*/}
+                                {/*</p>*/}
+                                {/*<p><strong>Is Operational*/}
+                                {/*    Flight:</strong> {flight.isOperationalFlight ? 'Yes' : 'No'}</p>*/}
+                                <p><strong>Schedule
+                                    Date:</strong> {new Date(flight.scheduleDateTime).toLocaleString()}</p>
                                 <p><strong>Estimated Landing
                                     Time:</strong> {new Date(flight.estimatedLandingTime).toLocaleString()}</p>
                                 <p><strong>Actual Landing
-                                    Time:</strong> {new Date(flight.actualLandingTime).toLocaleString()}
-                                </p>
+                                    Time:</strong> {new Date(flight.actualLandingTime).toLocaleString()}</p>
                                 {/*<p><strong>Baggage Claim:</strong> Belts: {flight.baggageClaim.belts.join(', ')}</p>*/}
-                                {/*<p><strong>Public Flight State:</strong> {flight.publicFlightState.flightStates.join(', ')}</p>*/}
+                                <p><strong>Public Flight
+                                    State:</strong> {flight.publicFlightState.flightStates.join(', ')}</p>
                                 {/*<p><strong>Route:</strong> {flight.route.destinations.join(', ')}</p>*/}
-                                <p><strong>Terminal:</strong> {flight.terminal}</p>
-                                <p><strong>Last Updated At:</strong> {new Date(flight.lastUpdatedAt).toLocaleString()}
+                                <p>
+                                    <strong>Route:</strong>
+                                    {transferAirport ? `Transfer via ${transferAirport} >> ` : ''}{finalDestination}
                                 </p>
+                                <p><strong>Terminal:</strong> {flight.terminal}</p>
+                                <p><strong>Last Updated
+                                    At:</strong> {new Date(flight.lastUpdatedAt).toLocaleString()}</p>
                             </div>
                             <button onClick={() => setSelectedFlight(flight)}>Seç</button>
                         </div>
-                ))
-            ):(
+                    );
+                })
+            ) : (
                 <p>No flights found.</p>
             )}
 
@@ -131,13 +158,17 @@ const FlightsSchiphol = () => {
                     <h2>Seçilen Uçuş:</h2>
                     <div className="flight-list">
                         <div className="flight-card">
-                            <h3>Flight Number: {selectedFlight.flightNumber}</h3>
+                            <p><strong>Flight Number:</strong> {selectedFlight.flightNumber}</p>
                             <p><strong>Flight Name:</strong> {selectedFlight.flightName}</p>
                             <p><strong>Airline Code:</strong> {selectedFlight.airlineCode}</p>
-                            {/*<p><strong>Aircraft Type:</strong> {selectedFlight.aircraftType.iataMain} ({selectedFlight.aircraftType.iataSub})</p>*/}
-                            <p><strong>Is Operational Flight:</strong> {selectedFlight.isOperationalFlight ? 'Yes' : 'No'}
+                            <p><strong>Aircraft
+                                Type:</strong> {selectedFlight.aircraftType.iataMain} ({selectedFlight.aircraftType.iataSub})
                             </p>
-                            <p><strong>Schedule Date:</strong> {new Date(selectedFlight.scheduleDateTime).toLocaleString()}
+                            <p><strong>Is Operational
+                                Flight:</strong> {selectedFlight.isOperationalFlight ? 'Yes' : 'No'}
+                            </p>
+                            <p><strong>flight
+                                date:</strong> {new Date(selectedFlight.scheduleDateTime).toLocaleString()}
                             </p>
                             <p><strong>Estimated Landing
                                 Time:</strong> {new Date(selectedFlight.estimatedLandingTime).toLocaleString()}</p>
@@ -145,10 +176,26 @@ const FlightsSchiphol = () => {
                                 Time:</strong> {new Date(selectedFlight.actualLandingTime).toLocaleString()}
                             </p>
                             {/*<p><strong>Baggage Claim:</strong> Belts: {selectedFlight.baggageClaim.belts.join(', ')}</p>*/}
-                            {/*<p><strong>Public Flight State:</strong> {selectedFlight.publicFlightState.flightStates.join(', ')}</p>*/}
+                            <p><strong>Public Flight
+                                State:</strong> {selectedFlight.publicFlightState.flightStates.join(', ')}</p>
                             {/*<p><strong>Route:</strong> {selectedFlight.route.destinations.join(', ')}</p>*/}
-                            <p><strong>Terminal:</strong> {selectedFlight.terminal}</p>
-                            <p><strong>Last Updated At:</strong> {new Date(selectedFlight.lastUpdatedAt).toLocaleString()}
+                            {selectedFlight.route && (
+                                <p><strong>Route:</strong>
+                                    {(() => {
+                                        const destinations = selectedFlight.route.destinations;
+                                        const { transferAirport, finalDestination } = getRouteInfo(destinations);
+                                        return (
+                                            <>
+                                                {transferAirport ? `Transfer via ${transferAirport} -> ` : ''}
+                                                {finalDestination}
+                                            </>
+                                        );
+                                    })()}
+                                </p>
+                            )}
+                            <p><strong>Terminal Section :</strong> {selectedFlight.terminal}</p>
+                            <p><strong>Last Updated
+                                At:</strong> {new Date(selectedFlight.lastUpdatedAt).toLocaleString()}
                             </p>
                         </div>
                     </div>
@@ -160,6 +207,7 @@ const FlightsSchiphol = () => {
 
         </div>
     );
+
 };
 
 export default FlightsSchiphol;

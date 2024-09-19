@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import "../index.css"
+
 
 // Uçuş verilerini çekmek için kullanılan bileşen
 const Flights = () => {
@@ -32,28 +34,27 @@ const Flights = () => {
         <div>
             <h1>Flight List</h1>
             {flight.length > 0 ? (
-                <ul>
+                <ul className="user-flight-list">
                     {flight.map((flight, index) => (
                         <li key={index} className="user-flight-card">
-                            <h2>id: {flight._id}</h2>
-                            <h3>Flight Number: {flight.flightNumber}</h3>
+                            <p><strong>Flight Number:</strong> {flight.flightNumber}</p>
                             <p><strong>Flight Name:</strong> {flight.flightName}</p>
                             <p><strong>Airline Code:</strong> {flight.airlineCode}</p>
-                            {/*<p><strong>Aircraft Type:</strong> {flight.aircraftType.iataMain} ({flight.aircraftType.iataSub})</p>*/}
+                            <p><strong>Aircraft
+                                Type:</strong> {flight.aircraftType.iataMain} ({flight.aircraftType.iataSub})</p>
                             <p><strong>Is Operational Flight:</strong> {flight.isOperationalFlight ? 'Yes' : 'No'}</p>
-                            <p><strong>Last Updated At:</strong> {new Date(flight.lastUpdatedAt).toLocaleString()}</p>
+                            <p><strong>Schedule Date:</strong> {new Date(flight.scheduleDateTime).toLocaleString()}</p>
                             <p><strong>Estimated Landing
                                 Time:</strong> {new Date(flight.estimatedLandingTime).toLocaleString()}</p>
                             <p><strong>Actual Landing
                                 Time:</strong> {new Date(flight.actualLandingTime).toLocaleString()}</p>
                             {/*<p><strong>Baggage Claim:</strong> Belts: {flight.baggageClaim.belts.join(', ')}</p>*/}
                             {/*<p><strong>Public Flight State:</strong> {flight.publicFlightState.flightStates.join(', ')}</p>*/}
-                            {/*<p><strong>Route:</strong> {flight.route.destinations.join(', ')}</p>*/}
-                            <p><strong>Schedule Date:</strong> {new Date(flight.scheduleDateTime).toLocaleDateString()}
-                            </p>
+                            <p><strong>Route:</strong> {flight.route.destinations.join(', ')}</p>
                             <p><strong>Terminal:</strong> {flight.terminal}</p>
+                            <p><strong>Last Updated At:</strong> {new Date(flight.lastUpdatedAt).toLocaleString()}</p>
 
-                            <button onClick={() => deleteFlight(flight._id)}>Sil</button>
+                            <button onClick={() => deleteFlight(flight._id)}>Delete</button>
                         </li>
                     ))}
                 </ul>

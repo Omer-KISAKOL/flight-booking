@@ -33,3 +33,21 @@
     color:#000;
     border:1px solid black;
 }
+
+.user-flight-list{
+    margin: 0;
+    padding: 20px;
+}
+.user-flight-card{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    border: 2px solid gray;
+}
+.user-flight-card p{
+    display: grid;
+    margin: auto;
+}
+.user-flight-card p strong{
+    margin-bottom: 10px;
+}

@@ -19,9 +19,31 @@ mongoose.connect('mongodb+srv://okisakol:YvzccLo6kEGRG4gP@flight-booking.nrna4.m
 
 // Uçuşlar için MongoDB şeması ve modeli
 const flightSchema = new mongoose.Schema({
-    flightNumber: String,
-    departureTime: Date,
-    destination: String,
+    flightNumber: String,                // Uçuş numarası
+    flightName: String,                  // Uçuş adı
+    actualLandingTime: Date,
+    aircraftType: {                      // Uçak tipi
+        iataMain: String,                // IATA ana kodu
+        iataSub: String                  // IATA alt kodu
+    },
+    airlineCode: Number,                 // Havayolu kodu
+    estimatedLandingTime: Date,          // Tahmini iniş zamanı
+    flightDirection: String,             // Uçuş yönü (A veya B)
+    isOperationalFlight: Boolean,        // Uçuş operasyonel mi?
+    lastUpdatedAt: Date,                 // Son güncelleme zamanı
+    mainFlight: String,                  // Ana uçuş
+    prefixIATA: String,                  // IATA öneki
+    prefixICAO: String,                  // ICAO öneki
+    route: {                             // Uçuş rotası
+        destinations: [String],          // Varış noktaları listesi
+        eu: String,                      // AB durumu
+        visa: String                     // Vize durumu
+    },
+    scheduleDate: String,                // Programlanmış uçuş tarihi
+    scheduleDateTime: Date,              // Programlanmış kalkış zamanı
+    scheduleTime: String,                // Programlanmış saat
+    serviceType: String,                  // Hizmet tipi
+    terminal: Number,
 });
 
 const Flight = mongoose.model('Flight', flightSchema);
