@@ -45,8 +45,31 @@ app.post('/api/flights', async (req, res) => {
 
 // Uçuşları listelemek için GET isteği
 app.get('/api/flights', async (req, res) => {
-    const flights = await Flight.find();
-    res.json(flights);
+    try {
+        // Tüm uçuşları veritabanından al
+        const flights = await Flight.find();
+        res.json(flights); // Uçuşları JSON formatında geri döndür
+    } catch (err) {
+        res.status(500).json({ error: 'Uçuşları çekerken bir hata oluştu.' });
+    }
+});
+
+// Uçuşu silmek için DELETE isteği
+app.delete('/api/flights/:id', async (req, res) => {
+    try {
+        const flightId = req.params.id;
+
+        // Uçuşu id ile bul ve sil
+        const flight = await Flight.findByIdAndDelete(flightId);
+
+        if (!flight) {
+            return res.status(404).json({ error: 'Uçuş bulunamadı.' });
+        }
+
+        res.json({ message: 'Uçuş başarıyla silindi.' });
+    } catch (err) {
+        res.status(500).json({ error: 'Uçuş silinirken bir hata oluştu.' });
+    }
 });
 
 

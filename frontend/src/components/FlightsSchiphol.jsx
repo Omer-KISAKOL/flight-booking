@@ -102,17 +102,21 @@ const FlightsSchiphol = () => {
                                 <p><strong>Flight Name:</strong> {flight.flightName}</p>
                                 <p><strong>Airline Code:</strong> {flight.airlineCode}</p>
                                 {/*<p><strong>Aircraft Type:</strong> {flight.aircraftType.iataMain} ({flight.aircraftType.iataSub})</p>*/}
-                                <p><strong>Is Operational Flight:</strong> {flight.isOperationalFlight ? 'Yes' : 'No'}</p>
-                                <p><strong>Last Updated At:</strong> {new Date(flight.lastUpdatedAt).toLocaleString()}</p>
+                                <p><strong>Is Operational Flight:</strong> {flight.isOperationalFlight ? 'Yes' : 'No'}
+                                </p>
+                                <p><strong>Schedule Date:</strong> {new Date(flight.scheduleDateTime).toLocaleString()}
+                                </p>
                                 <p><strong>Estimated Landing
                                     Time:</strong> {new Date(flight.estimatedLandingTime).toLocaleString()}</p>
-                                <p><strong>Actual Landing Time:</strong> {new Date(flight.actualLandingTime).toLocaleString()}
+                                <p><strong>Actual Landing
+                                    Time:</strong> {new Date(flight.actualLandingTime).toLocaleString()}
                                 </p>
                                 {/*<p><strong>Baggage Claim:</strong> Belts: {flight.baggageClaim.belts.join(', ')}</p>*/}
                                 {/*<p><strong>Public Flight State:</strong> {flight.publicFlightState.flightStates.join(', ')}</p>*/}
                                 {/*<p><strong>Route:</strong> {flight.route.destinations.join(', ')}</p>*/}
-                                <p><strong>Schedule Date:</strong> {new Date(flight.scheduleDateTime).toLocaleString()}</p>
                                 <p><strong>Terminal:</strong> {flight.terminal}</p>
+                                <p><strong>Last Updated At:</strong> {new Date(flight.lastUpdatedAt).toLocaleString()}
+                                </p>
                             </div>
                             <button onClick={() => setSelectedFlight(flight)}>Seç</button>
                         </div>
@@ -125,8 +129,29 @@ const FlightsSchiphol = () => {
             {selectedFlight && (
                 <div className="selected-flight-card">
                     <h2>Seçilen Uçuş:</h2>
-                    <p>No:{selectedFlight.flightNumber} -
-                        Kalkış:{new Date(selectedFlight.scheduleDateTime).toLocaleDateString()} - {selectedFlight.destination}</p>
+                    <div className="flight-list">
+                        <div className="flight-card">
+                            <h3>Flight Number: {selectedFlight.flightNumber}</h3>
+                            <p><strong>Flight Name:</strong> {selectedFlight.flightName}</p>
+                            <p><strong>Airline Code:</strong> {selectedFlight.airlineCode}</p>
+                            {/*<p><strong>Aircraft Type:</strong> {selectedFlight.aircraftType.iataMain} ({selectedFlight.aircraftType.iataSub})</p>*/}
+                            <p><strong>Is Operational Flight:</strong> {selectedFlight.isOperationalFlight ? 'Yes' : 'No'}
+                            </p>
+                            <p><strong>Schedule Date:</strong> {new Date(selectedFlight.scheduleDateTime).toLocaleString()}
+                            </p>
+                            <p><strong>Estimated Landing
+                                Time:</strong> {new Date(selectedFlight.estimatedLandingTime).toLocaleString()}</p>
+                            <p><strong>Actual Landing
+                                Time:</strong> {new Date(selectedFlight.actualLandingTime).toLocaleString()}
+                            </p>
+                            {/*<p><strong>Baggage Claim:</strong> Belts: {selectedFlight.baggageClaim.belts.join(', ')}</p>*/}
+                            {/*<p><strong>Public Flight State:</strong> {selectedFlight.publicFlightState.flightStates.join(', ')}</p>*/}
+                            {/*<p><strong>Route:</strong> {selectedFlight.route.destinations.join(', ')}</p>*/}
+                            <p><strong>Terminal:</strong> {selectedFlight.terminal}</p>
+                            <p><strong>Last Updated At:</strong> {new Date(selectedFlight.lastUpdatedAt).toLocaleString()}
+                            </p>
+                        </div>
+                    </div>
                     <button onClick={handleFlightSubmit}>Uçuşu Kaydet</button>
                 </div>
             )}
