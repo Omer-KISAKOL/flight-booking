@@ -3,7 +3,7 @@ import "../index.css"
 
 
 // Uçuş verilerini çekmek için kullanılan bileşen
-const Flights = () => {
+function Flights()  {
     const [flight, setFlight] = useState([]);
 
     useEffect(() => {
@@ -38,12 +38,12 @@ const Flights = () => {
                     {flight.map((flight, index) => (
                         <li key={index} className="user-flight-card">
                             <p><strong>Flight Number:</strong> {flight.flightNumber}</p>
-                            <p><strong>Flight Name:</strong> {flight.flightName}</p>
-                            <p><strong>Airline Code:</strong> {flight.airlineCode}</p>
-                            <p><strong>Aircraft
-                                Type:</strong> {flight.aircraftType.iataMain} ({flight.aircraftType.iataSub})</p>
-                            <p><strong>Is Operational Flight:</strong> {flight.isOperationalFlight ? 'Yes' : 'No'}</p>
-                            <p><strong>Schedule Date:</strong> {new Date(flight.scheduleDateTime).toLocaleString()}</p>
+                            {/*<p><strong>Flight Name:</strong> {flight.flightName}</p>*/}
+                            {/*<p><strong>Airline Code:</strong> {flight.airlineCode}</p>*/}
+                            {/*<p><strong>Aircraft*/}
+                            {/*    Type:</strong> {flight.aircraftType.iataMain} ({flight.aircraftType.iataSub})</p>*/}
+                            {/*<p><strong>Is Operational Flight:</strong> {flight.isOperationalFlight ? 'Yes' : 'No'}</p>*/}
+                            <p><strong>Flight Date:</strong> {new Date(flight.scheduleDateTime).toLocaleString()}</p>
                             <p><strong>Estimated Landing
                                 Time:</strong> {new Date(flight.estimatedLandingTime).toLocaleString()}</p>
                             <p><strong>Actual Landing
@@ -51,7 +51,7 @@ const Flights = () => {
                             {/*<p><strong>Baggage Claim:</strong> Belts: {flight.baggageClaim.belts.join(', ')}</p>*/}
                             {/*<p><strong>Public Flight State:</strong> {flight.publicFlightState.flightStates.join(', ')}</p>*/}
                             <p><strong>Route:</strong> {flight.route.destinations.join(', ')}</p>
-                            <p><strong>Terminal:</strong> {flight.terminal}</p>
+                            <p><strong>Terminal Section:</strong> {flight.terminal}</p>
                             <p><strong>Last Updated At:</strong> {new Date(flight.lastUpdatedAt).toLocaleString()}</p>
 
                             <button onClick={() => deleteFlight(flight._id)}>Delete</button>
@@ -63,6 +63,6 @@ const Flights = () => {
             )}
         </div>
     );
-};
+}
 
 export default Flights;
