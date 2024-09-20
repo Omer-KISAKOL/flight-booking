@@ -3,7 +3,7 @@ import "../index.css"
 
 
 // Uçuş verilerini çekmek için kullanılan bileşen
-function Flights()  {
+function Flights({GetRouteInfo})  {
     const [flight, setFlight] = useState([]);
 
     useEffect(() => {
@@ -14,7 +14,6 @@ function Flights()  {
             .catch(error => console.error('Error:', error));
     }, [flight]);
 
-    console.log(flight);
 
     const deleteFlight = async (flightId) => {
         try {
@@ -50,7 +49,21 @@ function Flights()  {
                                 Time:</strong> {new Date(flight.actualLandingTime).toLocaleString()}</p>
                             {/*<p><strong>Baggage Claim:</strong> Belts: {flight.baggageClaim.belts.join(', ')}</p>*/}
                             {/*<p><strong>Public Flight State:</strong> {flight.publicFlightState.flightStates.join(', ')}</p>*/}
-                            <p><strong>Route:</strong> {flight.route.destinations.join(', ')}</p>
+                            {/*<p><strong>Route:</strong> {flight.route.destinations.join(', ')}</p>*/}
+                            {flight.route && (
+                                <p><strong>Route:</strong>
+                                    {(() => {
+                                        const destinations = flight.route.destinations;
+                                        const { transferAirport, finalDestination } = GetRouteInfo(destinations);
+                                        return (
+                                            <>
+                                                {transferAirport ? `Transfer via ${transferAirport} -> ` : ''}
+                                                {finalDestination}
+                                            </>
+                                        );
+                                    })()}
+                                </p>
+                            )}
                             <p><strong>Terminal Section:</strong> {flight.terminal}</p>
                             <p><strong>Last Updated At:</strong> {new Date(flight.lastUpdatedAt).toLocaleString()}</p>
 

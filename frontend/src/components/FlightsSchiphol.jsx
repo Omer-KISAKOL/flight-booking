@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {IataData} from "../IataData.jsx";
 import "../index.css"
 
-function FlightsSchiphol() {
+function FlightsSchiphol({GetRouteInfo}) {
     const [flight, setFlight] = useState([]);
     const [selectedFlight, setSelectedFlight] = useState(null);
     const [selectedDate, setSelectedDate] = useState('');
@@ -58,21 +58,21 @@ function FlightsSchiphol() {
     };
 
 
-    function GetLocationFromCode (code) {
-        const entry = IataData.find(item => item.code === code);
-        return entry ? entry.location : code; // Eğer eşleşme bulunmazsa, kodu olduğu gibi yazdır
-    }
-
-    // IATA koduna göre varış şehir ve ülkesini döndüren fonksiyon
-    function GetRouteInfo(destinations){
-
-        const transferAirport = destinations.length > 1 ? GetLocationFromCode(destinations[0]) : null;
-
-        const finalDestinationCode = destinations[destinations.length - 1];
-        const finalDestination = GetLocationFromCode(finalDestinationCode);
-
-        return { transferAirport, finalDestination };
-    }
+    // function GetLocationFromCode (code) {
+    //     const entry = IataData.find(item => item.code === code);
+    //     return entry ? entry.location : code; // Eğer eşleşme bulunmazsa, kodu olduğu gibi yazdır
+    // }
+    //
+    // // IATA koduna göre varış şehir ve ülkesini döndüren fonksiyon
+    // function GetRouteInfo(destinations){
+    //
+    //     const transferAirport = destinations.length > 1 ? GetLocationFromCode(destinations[0]) : null;
+    //
+    //     const finalDestinationCode = destinations[destinations.length - 1];
+    //     const finalDestination = GetLocationFromCode(finalDestinationCode);
+    //
+    //     return { transferAirport, finalDestination };
+    // }
 
     return (
         <div className="flight-schiphol">
