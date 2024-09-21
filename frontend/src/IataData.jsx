@@ -37,4 +37,5 @@ export const IataData = [
     { code: "CTA", location: "Catania, Italy" },
     { code: "SVQ", location: "Seville, Spain" },
     { code: "MJT", location: "Mytilene, Greece" },
+    { code: "VNO", location: "Vilnius, Lithuania" },
 ];

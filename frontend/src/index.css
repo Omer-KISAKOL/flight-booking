@@ -1,9 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .flight-schiphol{
     display: grid;
     justify-content: center;
 }
 .flight-card{
     display: flex;
+    justify-content: space-around;
     border: 2px solid gray;
 }
 .flight-list{
@@ -12,6 +17,7 @@
 .flight-card p{
     display: grid;
     margin-right: 10px;
+    justify-items: center;
 }
 .flight-card p strong{
     margin-bottom: 10px;
@@ -26,6 +32,7 @@
     padding-top: 20px;
     padding-bottom: 20px;
     justify-content: center;
+    gap: 2rem;
 }
 .link{
     padding:10px 20px 10px 20px;
@@ -47,6 +54,7 @@
 .user-flight-card p{
     display: grid;
     margin: auto;
+    justify-content: center;
 }
 .user-flight-card p strong{
     margin-bottom: 10px;

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import "../index.css"
 
 
-// Uçuş verilerini çekmek için kullanılan bileşen
 function Flights({GetRouteInfo})  {
     const [flight, setFlight] = useState([]);
 
@@ -34,8 +33,8 @@ function Flights({GetRouteInfo})  {
             <h1>Flight List</h1>
             {flight.length > 0 ? (
                 <ul className="user-flight-list">
-                    {flight.map((flight, index) => (
-                        <li key={index} className="user-flight-card">
+                    {flight.slice().reverse().map((flight, index) => (
+                        <li key={index} className="flight-card">
                             <p><strong>Flight Number:</strong> {flight.flightNumber}</p>
                             {/*<p><strong>Flight Name:</strong> {flight.flightName}</p>*/}
                             {/*<p><strong>Airline Code:</strong> {flight.airlineCode}</p>*/}
@@ -67,7 +66,7 @@ function Flights({GetRouteInfo})  {
                             <p><strong>Terminal Section:</strong> {flight.terminal}</p>
                             <p><strong>Last Updated At:</strong> {new Date(flight.lastUpdatedAt).toLocaleString()}</p>
 
-                            <button onClick={() => deleteFlight(flight._id)}>Delete</button>
+                            <button onClick={() => deleteFlight(flight._id)}>Cancel</button>
                         </li>
                     ))}
                 </ul>

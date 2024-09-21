@@ -96,10 +96,11 @@ app.delete('/api/flights/:id', async (req, res) => {
 
 
 app.get('/api/schiphol-flights', async (req, res) => {
-    const { scheduleDate, flightNumber } = req.query; // URL'deki parametreleri alıyoruz
+    const { scheduleDate, selectedAirport, flightNumber } = req.query; // URL'deki parametreleri alıyoruz
 
     // API isteği için URL oluşturma
     let url = `https://api.schiphol.nl/public-flights/flights?scheduleDate=${scheduleDate}`;
+// &flight.route.destinations=${selectedAirport}
 
     if (flightNumber) {
         url += `&flightNumber=${flightNumber}`;
@@ -115,7 +116,19 @@ app.get('/api/schiphol-flights', async (req, res) => {
             }
         });
         const data = await apiResponse.json();
-        res.status(200).json(data);
+
+        // Uçuşları selectedAirport ile filtrele
+        const filteredFlights = selectedAirport ? data.flights.filter(flight => {
+            const destinations = flight.route && flight.route.destinations;
+            if (destinations && destinations.length > 0) {
+                const finalDestination = destinations.length > 1 ? destinations[1] : destinations[0];
+                return finalDestination === selectedAirport;
+            }
+            return false;
+        }) : data.flights;
+
+
+        res.status(200).json(filteredFlights);
     } catch (error) {
         res.status(500).json({ error: 'Veri çekilirken bir hata oluştu.' });
     }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import {IataData} from "../IataData.jsx";
 import "../index.css"
@@ -8,6 +8,7 @@ function FlightsSchiphol({GetRouteInfo}) {
     const [selectedFlight, setSelectedFlight] = useState(null);
     const [selectedDate, setSelectedDate] = useState('');
     const [flightNumber, setFlightNumber] = useState('');
+    const [selectedAirport, setSelectedAirport] = useState('')
     const [message, setMessage] = useState('');
 
 
@@ -19,20 +20,30 @@ function FlightsSchiphol({GetRouteInfo}) {
         setFlightNumber(event.target.value);
     };
 
+    const handleAirportChange = (event) => {
+        setSelectedAirport(event.target.value);
+    };
+
+    useEffect(() => {
+        const today = new Date().toISOString().split('T')[0];
+        setSelectedDate(today)
+    }, []);
+
     const handleFilterSubmit = (event) => {
         event.preventDefault();
 
         const query = new URLSearchParams({
             scheduleDate: selectedDate,
             flightNumber: flightNumber,
+            selectedAirport: selectedAirport,
         }).toString();
 
         // Backend üzerinden Schiphol API'den uçuş verilerini çekiyoruz
         fetch(`http://localhost:5000/api/schiphol-flights?${query}`)
             .then(response => response.json())
             .then(data => {
-                setFlight(data.flights); // Schiphol API'den gelen uçuşları state'e koyuyoruz
-                console.log(data.flights)
+                setFlight(data); // Schiphol API'den gelen uçuşları state'e koyuyoruz
+                console.log(data)
             })
             .catch(error => console.error('Error fetching flights:', error));
 
@@ -58,22 +69,6 @@ function FlightsSchiphol({GetRouteInfo}) {
     };
 
 
-    // function GetLocationFromCode (code) {
-    //     const entry = IataData.find(item => item.code === code);
-    //     return entry ? entry.location : code; // Eğer eşleşme bulunmazsa, kodu olduğu gibi yazdır
-    // }
-    //
-    // // IATA koduna göre varış şehir ve ülkesini döndüren fonksiyon
-    // function GetRouteInfo(destinations){
-    //
-    //     const transferAirport = destinations.length > 1 ? GetLocationFromCode(destinations[0]) : null;
-    //
-    //     const finalDestinationCode = destinations[destinations.length - 1];
-    //     const finalDestination = GetLocationFromCode(finalDestinationCode);
-    //
-    //     return { transferAirport, finalDestination };
-    // }
-
     return (
         <div className="flight-schiphol">
             <h1>Schiphol Uçuşları</h1>
@@ -83,8 +78,9 @@ function FlightsSchiphol({GetRouteInfo}) {
             </div>
 
             <form onSubmit={handleFilterSubmit} className="flight-filter">
+
                 <div>
-                    <label htmlFor="scheduleDate">Schedule Date:</label>
+                    <label htmlFor="scheduleDate"><strong>Flight Date:</strong></label>
                     <input
                         type="date"
                         id="scheduleDate"
@@ -94,8 +90,9 @@ function FlightsSchiphol({GetRouteInfo}) {
                         required={true}
                     />
                 </div>
+
                 <div>
-                    <label htmlFor="flightNumber">Flight Number:</label>
+                    <label htmlFor="flightNumber"><strong>Flight Number:</strong></label>
                     <input
                         type="text"
                         id="flightNumber"
@@ -104,16 +101,47 @@ function FlightsSchiphol({GetRouteInfo}) {
                         onChange={handleFlightNumberChange}
                     />
                 </div>
-                <button type="submit">Search Flights</button>
+
+                <div>
+                    <label htmlFor="departingFrom"><strong>Departing from:</strong></label>
+                    <select
+                        id="departingFrom"
+                        name="departingFrom"
+                        required={true}
+                    >
+                        <option value="">Select an airport</option>
+                        <option value="AMS">Amsterdam (AMS)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label htmlFor="airportCode"><strong>Arriving at:</strong></label>
+                    <select
+                        id="airportCode"
+                        name="airportCode"
+                        value={selectedAirport}
+                        onChange={handleAirportChange}
+                        required={false}
+                    >
+                        <option value="">Select an airport</option>
+                        {IataData.map((airport) => (
+                            <option key={airport.code} value={airport.code}>
+                                {airport.location} ({airport.code})
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <button type="submit" className="bg-purple-600 px-4 py-2 border-2 border-black hover:bg-white">Search Flights</button>
             </form>
 
-            {flight.length > 0 ?(
+            {flight.length > 0 ? (
                 flight.map((flight, index) => {
 
                     const destinations = flight.route.destinations;
 
                     // GetRouteInfo fonksiyonunu kullanarak varış şehir ve ülkesini alıyor
-                    const { transferAirport, finalDestination } = GetRouteInfo(destinations);
+                    const {transferAirport, finalDestination} = GetRouteInfo(destinations);
 
                     return (
                         <div className="flight-list">
