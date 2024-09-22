@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css'
-import UserFlights from "./components/UserFlights.jsx";
-import FlightsSchiphol from "./components/FlightsSchiphol.jsx";
+import UserFlights from "./pages/UserFlights.jsx";
+import FlightsSchiphol from "./pages/FlightsSchiphol.jsx";
 import {Route, Routes} from "react-router-dom";
 import {IataData} from "./IataData.jsx";
 

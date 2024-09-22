@@ -22,7 +22,7 @@ export const IataData = [
     { code: "LPA", location: "Las Palmas, Spain" },
     { code: "VLC", location: "Valencia, Spain" },
     { code: "RHO", location: "Rhodes, Greece" },
-    { code: "LHR", location: "London Heathrow, United Kingdom" },
+    { code: "LHR", location: "London, United Kingdom" },
     { code: "LCA", location: "Larnaca, Cyprus" },
     { code: "ATH", location: "Athens, Greece" },
     { code: "GRO", location: "Girona, Spain" },

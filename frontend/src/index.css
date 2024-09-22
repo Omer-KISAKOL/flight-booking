@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+#root{
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    width: 100%;
+}
 .flight-schiphol{
     display: grid;
     justify-content: center;
@@ -31,8 +37,14 @@
     display: flex;
     padding-top: 20px;
     padding-bottom: 20px;
+    justify-content: space-evenly;
+    gap: 1rem;
+}
+.flight-filter div{
+    max-width: max-content;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    gap: 2rem;
 }
 .link{
     padding:10px 20px 10px 20px;
