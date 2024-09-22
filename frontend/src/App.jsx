@@ -3,7 +3,7 @@ import './App.css'
 import UserFlights from "./pages/UserFlights.jsx";
 import FlightsSchiphol from "./pages/FlightsSchiphol.jsx";
 import {Route, Routes} from "react-router-dom";
-import {IataData} from "./IataData.jsx";
+import {IataData} from "./utils/IataData.jsx";
 
 function App() {
 

@@ -3,9 +3,6 @@
 @tailwind utilities;
 
 #root{
-    /*display: flex;*/
-    /*justify-content: center;*/
-    /*align-items: center;*/
     width: 100%;
 }
 .flight-schiphol{
@@ -19,6 +16,7 @@
 }
 .flight-list{
     padding-bottom: 20px;
+    /*max-width: 500px;*/
 }
 .flight-card p{
     display: grid;

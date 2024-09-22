@@ -96,10 +96,10 @@ app.delete('/api/flights/:id', async (req, res) => {
 
 
 app.get('/api/schiphol-flights', async (req, res) => {
-    const { scheduleDate, selectedAirport, flightNumber } = req.query; // URL'deki parametreleri alıyoruz
+    const { selectedDate, selectedAirport, flightNumber } = req.query; // URL'deki parametreleri alıyoruz
 
     // API isteği için URL oluşturma
-    let url = `https://api.schiphol.nl/public-flights/flights?scheduleDate=${scheduleDate}`;
+    let url = `https://api.schiphol.nl/public-flights/flights?scheduleDate=${selectedDate}`;
 // &flight.route.destinations=${selectedAirport}
 
     if (flightNumber) {
@@ -133,10 +133,6 @@ app.get('/api/schiphol-flights', async (req, res) => {
         res.status(500).json({ error: 'Veri çekilirken bir hata oluştu.' });
     }
 });
-
-
-
-
 
 
 // Sunucuyu 5000 portunda çalıştırıyoruz

@@ -20,7 +20,7 @@ This application allows users to view flight information, filter flights by date
 - **React** (Frontend)
 - **Node.js** (Backend)
 - **MongoDB** (Database)
-- **CSS**: Styling has been done using simple and modern CSS. No external libraries were used. (Optionally, **CSS frameworks** or **Styled Components** can be used.)
+- **CSS**:
 
 ---
 
@@ -35,7 +35,7 @@ This application allows users to view flight information, filter flights by date
 ## Minimum Requirements
 - **Node.js**: Version 14.x or above
 - **MongoDB**: A working MongoDB instance is required.
-- **npm**: For package management (Yarn can be used as an alternative).
+- **pnpm**: For package management (Yarn can be used as an alternative).
 
 ---
 
@@ -51,7 +51,7 @@ Follow these steps to set up the project:
 
 2. **Install dependencies**:
     ```bash
-    npm install
+    pnpm install
     ```
 
 3. **Add API keys**: Create an account at Schiphol Flight API and get your `Application Id` and `Application Key`. Then, create a `.env` file in the project root and add your API keys like this:
@@ -68,7 +68,7 @@ Follow these steps to set up the project:
 
 5. **Start the project**:
     ```bash
-    npm start
+    pnpm start
     ```
 
 ---
@@ -144,7 +144,7 @@ Bu uygulama, uçuş bilgilerini görüntülemek, tarih ve yönlere göre filtrel
 ## Minimum Gereksinimler
 - **Node.js**: 14.x ve üzeri
 - **MongoDB**: Veritabanı için kurulmuş olması gerekli.
-- **npm**: Paket yönetimi için gerekli (alternatif olarak Yarn kullanılabilir).
+- **pnpm**: Paket yönetimi için gerekli (alternatif olarak Yarn kullanılabilir).
 
 ---
 
@@ -160,7 +160,7 @@ Projeyi çalıştırmak için aşağıdaki adımları takip edin:
 
 2. **Gerekli bağımlılıkları yükleyin**:
     ```bash
-    npm install
+    pnpm install
     ```
 
 3. **API anahtarlarını ekleyin**: Schiphol Flight API için bir hesap oluşturup `Application Id` ve `Application Key` bilgilerinizi alın. Ardından, projenin kök dizininde `.env` dosyasını oluşturup şu şekilde API anahtarlarını ekleyin:
@@ -177,7 +177,7 @@ Projeyi çalıştırmak için aşağıdaki adımları takip edin:
 
 5. **Proje'yi başlatın**:
     ```bash
-    npm start
+    pnpm start
     ```
 
 ---

@@ -1,14 +1,25 @@
 import {IoAirplane} from "react-icons/io5";
-import {IataData} from "../IataData.jsx";
-import React, {useState} from "react";
+import {IataData} from "../utils/IataData.jsx";
+import React, {useEffect, useState} from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { setFlightNumber, setSelectedAirport, setSelectedDate, setReturnDate } from '../features/filterSlice.jsx';
 
-function Filter({ handleFilterSubmit, selectedDate, handleDateChange, returnDate, handleReturnDateChange, flightNumber, handleFlightNumberChange, selectedAirport, handleAirportChange}) {
+
+function Filter({handleFilterSubmit}) {
+
+    const dispatch = useDispatch();
+    const filters = useSelector((state) => state.filters);
 
     const [tripType, setTripType] = useState('oneWay');
 
     const handleTripChange = (event) => {
-        setTripType(event.target.value); // 'oneWay' veya 'roundTrip' seçildiğinde state güncellenir
+        setTripType(event.target.value);
     };
+
+    useEffect(() => {
+        const today = new Date().toISOString().split('T')[0];
+        dispatch(setSelectedDate(today))
+    }, []);
 
     return(
         <div className="flex flex-col items-center">
@@ -32,7 +43,7 @@ function Filter({ handleFilterSubmit, selectedDate, handleDateChange, returnDate
                                 type="radio"
                                 value="roundTrip"
                                 checked={tripType === 'roundTrip'}
-                                onChange={handleTripChange}
+                                onChange={(e) => dispatch(setTripType(e.target.value))}
                             />
                             Round Trip
                         </label>
@@ -47,8 +58,8 @@ function Filter({ handleFilterSubmit, selectedDate, handleDateChange, returnDate
                             type="date"
                             id="scheduleDate"
                             name="scheduleDate"
-                            value={selectedDate}
-                            onChange={handleDateChange}
+                            value={filters.selectedDate}
+                            onChange={(e) => dispatch(setSelectedDate(e.target.value))}
                             min={new Date().toISOString().split("T")[0]}
                             required={true}
                         />
@@ -61,8 +72,8 @@ function Filter({ handleFilterSubmit, selectedDate, handleDateChange, returnDate
                                 type="date"
                                 id="returnDate"
                                 name="returnDate"
-                                value={returnDate}
-                                onChange={handleReturnDateChange}
+                                value={filters.returnDate}
+                                onChange={(e) => dispatch(setReturnDate(e.target.value))}
                                 min={new Date().toISOString().split("T")[0]} // Geçmiş tarihler seçilemez
                                 required={true}
                             />
@@ -78,8 +89,8 @@ function Filter({ handleFilterSubmit, selectedDate, handleDateChange, returnDate
                             maxLength="4"
                             id="flightNumber"
                             name="flightNumber"
-                            value={flightNumber}
-                            onChange={handleFlightNumberChange}
+                            value={filters.flightNumber}
+                            onChange={(e) => dispatch(setFlightNumber(e.target.value))}
                         />
                     </div>
 
@@ -100,8 +111,8 @@ function Filter({ handleFilterSubmit, selectedDate, handleDateChange, returnDate
                         <select
                             id="airportCode"
                             name="airportCode"
-                            value={selectedAirport}
-                            onChange={handleAirportChange}
+                            value={filters.selectedAirport}
+                            onChange={(e) => dispatch(setSelectedAirport(e.target.value))}
                             required={false}
                         >
                             <option value="">Select an airport</option>

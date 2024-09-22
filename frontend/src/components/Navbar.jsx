@@ -1,4 +1,4 @@
-import {IoAirplane} from "react-icons/io5";
+import {IoIosAirplane} from "react-icons/io";
 import { MdDiscount } from "react-icons/md";
 import { BiWorld } from "react-icons/bi";
 import user_profil from "../assets/user-profil.png"
@@ -27,10 +27,10 @@ function Filter() {
     }, []);
 
     return(
-        <div className="sticky top-0 flex justify-center">
+        <div className="sticky top-0 flex justify-center bg-white col-start-1 col-end-12 z-50">
             <div className="flex justify-between items-center w-[97%]">
                 <h1 className="flex items-center text-xl font-medium my-10 gap-1">
-                    <IoAirplane className="w-8 h-8 text-white bg-purple-700 rounded-3xl"/>
+                    <IoIosAirplane className="w-8 h-8 text-white bg-purple-800 rounded-3xl"/>
                     PLANE SCAPE
                 </h1>
                 <div className="flex items-center gap-5 relative" ref={dropdownRef}>
