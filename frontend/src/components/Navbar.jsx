@@ -5,7 +5,7 @@ import user_profil from "../assets/user-profil.png"
 import React, {useState, useEffect, useRef} from "react";
 import {Link} from "react-router-dom";
 
-function Filter() {
+function Navbar() {
 
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -27,7 +27,7 @@ function Filter() {
     }, []);
 
     return(
-        <div className="sticky top-0 flex justify-center bg-white col-start-1 col-end-12 z-50">
+        <div className="sticky z-50 top-0 flex justify-center bg-gray-50 col-start-1 col-end-12 mb-4">
             <div className="flex justify-between items-center w-[97%]">
                 <h1 className="flex items-center text-xl font-medium my-10 gap-1">
                     <IoIosAirplane className="w-8 h-8 text-white bg-purple-800 rounded-3xl"/>
@@ -62,4 +62,4 @@ function Filter() {
     );
 }
 
-export default Filter;
+export default Navbar;

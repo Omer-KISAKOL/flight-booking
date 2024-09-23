@@ -4,6 +4,7 @@
 
 #root{
     width: 100%;
+    background-color: rgb(243 244 246);
 }
 .flight-schiphol{
     display: grid;
@@ -68,4 +69,7 @@
 }
 .user-flight-card p strong{
     margin-bottom: 10px;
+}
+.rounded-book{
+    border-radius: 0.5rem 0 0.5rem 0;
 }

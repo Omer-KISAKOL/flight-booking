@@ -1,22 +1,40 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import "../index.css"
 import Filter from "../components/Filter.jsx";
 import Navbar from "../components/Navbar.jsx";
 import Services from "../components/Services.jsx";
-import { useSelector } from 'react-redux';
+import { useSelector , useDispatch } from 'react-redux';
 import { TbPlaneDeparture , TbPlaneArrival } from "react-icons/tb";
 import {IoIosAirplane} from "react-icons/io";
 import {convertToAmPm, FlightTimeDifference , extractTimeFromDateTime} from "../utils/timeUtils.jsx";
 import turkish_airlines from "../assets/turkish-airlines.png";
 import {Link} from "react-router-dom";
+import {BookFlight} from "../components/BookFlight.jsx";
+import {FlightDetails} from "../components/FlightDetails.jsx";
+import { setMessage } from '../features/filterSlice.jsx';
 
 function FlightsSchiphol({GetRouteInfo}) {
     const [flight, setFlight] = useState([]);
     const [selectedFlight, setSelectedFlight] = useState(null);
-    const [message, setMessage] = useState('');
+    const [triggeredBy, setTriggeredBy] = useState(null);
 
+    const dispatch = useDispatch();
     const filters = useSelector((state) => state.filters);
 
+    const handleBookClick = (flight) => {
+        setSelectedFlight(flight);
+        setTriggeredBy('book');
+    };
+
+    const handleDetailsClick = (flight) => {
+        setSelectedFlight(flight);
+        setTriggeredBy('details');
+    };
+    const closePopup = () => {
+        setTriggeredBy(null);
+        setSelectedFlight(null);
+        dispatch(setMessage(''))
+    };
 
     const handleFilterSubmit = (event) => {
         event.preventDefault();
@@ -50,132 +68,20 @@ function FlightsSchiphol({GetRouteInfo}) {
             });
 
             const data = await response.text();
-            setMessage(data); // POST işleminden dönen mesajı saklıyoruz
+            dispatch(setMessage(data)); // POST işleminden dönen mesaj
         } catch (error) {
             console.error('Error posting flight:', error);
-            setMessage('Bir hata oluştu.');
+            dispatch(setMessage('Bir hata oluştu.'));
         }
     };
 
     return (
         <div className="grid row w-full">
             <Navbar/>
-            <div className="col-start-1 col-end-11">
-                <Filter handleFilterSubmit={handleFilterSubmit}/>
-
-                <div className="flex flex-col md:flex-row justify-between p-6">
-
-                    <div className="flex flex-col w-full md:w-9/12">
-
-                        {flight.length > 0 ? (
-                            flight.map((flight, index) => {
-
-                                // GetRouteInfo fonksiyonunu kullanarak varış lokasyonunu alıyoruz
-                                const destinations = flight.route.destinations;
-                                const {transferAirport, finalDestination} = GetRouteInfo(destinations);
-
-                                return (
-                                    <>
-                                        <div className="bg-white p-4 rounded-lg shadow-md">
-                                            <h3 className="text-sm font-bold">
-                                                Amsterdam
-                                                - {transferAirport ? `Transfer via ${transferAirport} >> ` : ''}{finalDestination}
-                                            </h3>
-                                            <div key={index} className="flex justify-between items-center">
-                                                <div className="grid place-items-start">
-                                                    <div className="flex gap-1 items-center">
-                                                        <TbPlaneDeparture/>
-                                                        <p>Departure</p>
-                                                    </div>
-                                                    <p>{convertToAmPm(flight.scheduleTime)}</p>
-                                                    <p>Airport: AMS</p>
-                                                </div>
-                                                <div className="grid items-center place-items-center">
-                                                    <img src={turkish_airlines} alt="turkish_airlines"
-                                                         className="w-14"/>
-                                                    <IoIosAirplane className="w-6 h-6 fill-purple-900"/>
-                                                    <span>{FlightTimeDifference(flight.scheduleDateTime, flight.estimatedLandingTime)} {flight.route.destinations.length === 1 ? (
-                                                        <span>(Nonstop)</span>) : (<span>(Via Transit)</span>)}</span>
-                                                </div>
-                                                <div className="grid place-items-start">
-                                                    <div className="flex gap-1 items-center">
-                                                        <TbPlaneArrival/>
-                                                        <p>Arrival</p>
-                                                    </div>
-                                                    <p>{convertToAmPm(extractTimeFromDateTime(flight.estimatedLandingTime))}</p>
-                                                    <p>Airport: {flight.route.destinations.join(', ')}</p>
-                                                </div>
-                                            </div>
-                                            <div className="flex justify-between items-center relative mt-8">
-                                                <p className="text-purple-500 text-lg font-bold">Price: $200</p>
-                                                <button className="bg-purple-800 absolute -bottom-4 -right-4 text-white py-4 px-10 rounded-lg rounded-b-none rounded-e-none" onClick={() => setSelectedFlight(flight)}>
-                                                    Book Flight
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <Link to='/' className="text-purple-800 mb-6 underline w-44 h-10 bg-purple-200 text-center items-center rounded-b-lg">Check the details</Link>
-                                    </>
-                                );
-                            })
-                        ) : (
-                            <p>No flights found.</p>
-                        )}
-
-
-                        {selectedFlight && (
-                            <div className="selected-flight-card">
-                                <h2>Seçilen Uçuş:</h2>
-                                <div className="flight-list">
-                                    <div className="flight-card">
-                                        <p><strong>Flight Number:</strong> {selectedFlight.flightNumber}</p>
-                                        {/*<p><strong>Flight Name:</strong> {selectedFlight.flightName}</p>*/}
-                                        {/*<p><strong>Airline Code:</strong> {selectedFlight.airlineCode}</p>*/}
-                                        {/*<p><strong>Aircraft*/}
-                                        {/*    Type:</strong> {selectedFlight.aircraftType.iataMain} ({selectedFlight.aircraftType.iataSub})*/}
-                                        {/*</p>*/}
-                                        {/*<p><strong>Is Operational*/}
-                                        {/*    Flight:</strong> {selectedFlight.isOperationalFlight ? 'Yes' : 'No'}*/}
-                                        {/*</p>*/}
-                                        <p><strong>Flight
-                                            Date:</strong> {new Date(selectedFlight.scheduleDateTime).toLocaleString()}
-                                        </p>
-                                        <p><strong>Estimated Landing
-                                            Time:</strong> {new Date(selectedFlight.estimatedLandingTime).toLocaleString()}</p>
-                                        <p><strong>Actual Landing
-                                            Time:</strong> {new Date(selectedFlight.actualLandingTime).toLocaleString()}
-                                        </p>
-                                        {/*<p><strong>Baggage Claim:</strong> Belts: {selectedFlight.baggageClaim.belts.join(', ')}</p>*/}
-                                        <p><strong>Public Flight
-                                            State:</strong> {selectedFlight.publicFlightState.flightStates.join(', ')}</p>
-                                        {/*<p><strong>Route:</strong> {selectedFlight.route.destinations.join(', ')}</p>*/}
-                                        {selectedFlight.route && (
-                                            <p><strong>Route:</strong>
-                                                {(() => {
-                                                    const destinations = selectedFlight.route.destinations;
-                                                    const {transferAirport, finalDestination} = GetRouteInfo(destinations);
-                                                    return (
-                                                        <>
-                                                            {transferAirport ? `Transfer via ${transferAirport} -> ` : ''}
-                                                            {finalDestination}
-                                                        </>
-                                                    );
-                                                })()}
-                                            </p>
-                                        )}
-                                        <p><strong>Terminal Section:</strong> {selectedFlight.terminal}</p>
-                                        <p><strong>Last Updated
-                                            At:</strong> {new Date(selectedFlight.lastUpdatedAt).toLocaleString()}
-                                        </p>
-                                    </div>
-                                </div>
-                                <button onClick={handleFlightSubmit}>Save Flight</button>
-                            </div>
-                        )}
-
-                        {message && <p>{message}</p>}
-                    </div>
-
-                    <div className="w-full md:w-3/12  p-4 mt-6 ms-4 md:mt-0">
+            <div className="col-start-1 lg:col-end-11 col-end-12 ">
+                <div className="flex w-full">
+                    <Filter handleFilterSubmit={handleFilterSubmit}/>
+                    <div className="w-5/12 md:hidden sm:block hidden  p-4 mt-6 mx-2 md:mt-0">
                         <div className="mb-4">
                             <label className="font-bold text-lg">Sort by:</label>
                             <select className="w-full border-gray-300 rounded-lg mt-2">
@@ -234,11 +140,187 @@ function FlightsSchiphol({GetRouteInfo}) {
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div className="flex flex-col md:flex-row justify-between p-6">
+
+                    <div className="flex flex-col w-full md:w-9/12">
+
+                        {flight.length > 0 ? (
+                            flight.map((flight, index) => {
+
+                                // GetRouteInfo fonksiyonunu kullanarak varış lokasyonunu alıyoruz
+                                const destinations = flight.route.destinations;
+                                const {transferAirport, finalDestination} = GetRouteInfo(destinations);
+
+                                return (
+                                    <>
+                                        <div className="bg-white p-4 rounded-lg shadow-md">
+                                            <h3 className="text-sm font-bold mb-4">
+                                                Amsterdam
+                                                - {transferAirport ? `Transfer via ${transferAirport} -> ` : ''}{finalDestination}
+                                            </h3>
+                                            <div key={index} className="flex justify-between items-center">
+                                                <div className="grid place-items-start">
+                                                    <div className="flex gap-1 items-center">
+                                                        <TbPlaneDeparture/>
+                                                        <p>Departure</p>
+                                                    </div>
+                                                    <strong
+                                                        className="text-xl">{convertToAmPm(extractTimeFromDateTime(flight.scheduleDateTime))}</strong>
+                                                    <p>Airport: AMS</p>
+                                                </div>
+                                                <div className="grid items-center place-items-center">
+                                                    <img src={turkish_airlines} alt="turkish_airlines"
+                                                         className="w-14"/>
+                                                    <IoIosAirplane className="w-6 h-6 fill-purple-900"/>
+                                                    <span>{FlightTimeDifference(flight.scheduleDateTime, flight.estimatedLandingTime)} {flight.route.destinations.length === 1 ? (
+                                                        <span>(Nonstop)</span>) : (<span>(Via Transit)</span>)}</span>
+                                                </div>
+                                                <div className="grid place-items-start">
+                                                    <div className="flex gap-1 items-center">
+                                                        <TbPlaneArrival/>
+                                                        <p>Arrival</p>
+                                                    </div>
+                                                    <strong
+                                                        className="text-xl">{convertToAmPm(extractTimeFromDateTime(flight.estimatedLandingTime))}</strong>
+                                                    <p>Airport: {flight.route.destinations.join(', ')}</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between items-center relative mt-8">
+                                                <p className="text-purple-500 text-lg font-bold">Price: $200</p>
+                                                <button
+                                                    className="bg-purple-800 absolute -bottom-4 -right-4 text-white py-4 px-10 rounded-book"
+                                                    onClick={() => handleBookClick(flight)}>
+                                                    Book Flight
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <Link to='/' onClick={() => handleDetailsClick(flight)}
+                                              className="text-purple-800 mb-6 underline w-44 h-10 bg-purple-200 text-center items-center rounded-b-lg">
+                                            Check the details
+                                        </Link>
+                                    </>
+                                );
+                            })
+                        ) : (
+                            <div className="flex mt-8 justify-center h-screen bg-gray-100">
+                                <div className="text-center">
+                                    <h1 className="text-2xl font-bold text-gray-700">No results</h1>
+                                    <p className="text-gray-500 mt-2">Sorry, there are no results for your search.
+                                        Please try a new set of dates.</p>
+                                </div>
+                            </div>
+                        )}
+
+
+                        {selectedFlight && (
+                            <div className="selected-flight-card">
+                                {triggeredBy === 'book' ? (
+                                    <>
+                                        {selectedFlight.route && (
+                                            (() => {
+                                                const destinations = selectedFlight.route.destinations;
+                                                const {
+                                                    transferAirport,
+                                                    finalDestination
+                                                } = GetRouteInfo(destinations);
+                                                return (<BookFlight flight={selectedFlight} onClose={closePopup}
+                                                                    handleFlightSubmit={handleFlightSubmit}
+                                                                    transferAirport={transferAirport}
+                                                                    finalDestination={finalDestination}/>)
+                                            })()
+                                        )}
+
+                                    </>
+                                ) : (
+                                    <>
+                                        {selectedFlight.route && (
+                                                (() => {
+                                                    const destinations = selectedFlight.route.destinations;
+                                                    const {
+                                                        transferAirport,
+                                                        finalDestination
+                                                    } = GetRouteInfo(destinations);
+                                                    return(<FlightDetails flight={selectedFlight} onClose={closePopup}
+                                                                          handleFlightSubmit={handleFlightSubmit}
+                                                                          transferAirport={transferAirport}
+                                                                          finalDestination={finalDestination}/>)
+                                            })()
+                                        )}
+                                    </>
+                                    // Render HTML for "Check Details"
+                                    // <div>
+                                    //     <p>Flight Details:</p>
+                                    //     <strong>Check the details</strong>
+                                    // </div>
+                                )}
+                            </div>
+                        )}
+
+
+                    </div>
+
+                    <div className="w-full md:w-3/12 md:block hidden p-4 mt-6 ms-8 md:mt-0">
+                        <div className="mb-4">
+                            <label className="font-bold text-lg">Sort by:</label>
+                            <select className="bg-gray-100 border border-gray-300 py-2 px-3 m-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
+                                <option>Lowest Price</option>
+                                <option>Highest Price</option>
+                            </select>
+                        </div>
+
+                        <div className="mb-4">
+                            <h4 className="font-bold text-lg">Arrival Time</h4>
+                            <div className="mt-2">
+                                <label className="block">
+                                    <input type="radio" name="arrivalTime"/>
+                                    5:00 AM - 11:59 AM
+                                </label>
+                                <label className="block">
+                                    <input type="radio" name="arrivalTime"/>
+                                    12:00 PM - 5:59 PM
+                                </label>
+                            </div>
+                        </div>
+
+                        <div className="mb-4">
+                            <h4 className="font-bold text-lg">Stops</h4>
+                            <div className="mt-2">
+                                <label className="block">
+                                    <input type="radio" name="stops"/>
+                                    Nonstop
+                                </label>
+                                <label className="block">
+                                    <input type="radio" name="stops"/>
+                                    1 Stop
+                                </label>
+                            </div>
+                        </div>
+
+                        <div className="mb-4">
+                            <h4 className="font-bold text-lg">Airlines Included</h4>
+                            <div className="mt-2">
+                                <label className="block">
+                                    <input type="radio" name="airlines"/>
+                                    Alitalia
+                                </label>
+                                <label className="block">
+                                    <input type="radio" name="airlines"/>
+                                    Lufthansa
+                                </label>
+                                <label className="block">
+                                    <input type="radio" name="airlines"/>
+                                    Air France
+                                </label>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>
 
-            <div className="col-start-11 col-end-12">
+            <div className="col-start-11 col-end-12 lg:block hidden">
                 <Services/>
             </div>
 

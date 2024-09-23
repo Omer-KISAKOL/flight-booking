@@ -3,7 +3,7 @@ export const convertToAmPm = (time) => {
     let hours = parseInt(hour);
     const ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12 || 12; // 12 saat formatına çevir
-    if (time === 'Unclear'){
+    if (time === 'Unclear' || time === ''){
         return ('Unclear')
     }
     return `${hours}:${minute} ${ampm}`;
@@ -32,17 +32,25 @@ export const FlightTimeDifference = (scheduleDateTime,estimatedLandingTime) => {
 };
 
 export const extractTimeFromDateTime = (dateTimeString) => {
-    // Date objesi olarak parse edelim
     const date = new Date(dateTimeString);
 
     // Saat, dakika ve saniyeyi alalım
-    const hours = String(date.getUTCHours()).padStart(2, '0');
-    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-    const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
 
     if (dateTimeString === undefined){
         return ('Unclear')
     }
     // Saat formatında geri döndürelim
-    return `${hours}:${minutes}:${seconds}`;
+    return `${hours}:${minutes}`;
 };
+
+export function formatDate(isoDate) {
+    const date = new Date(isoDate);
+
+    const day = date.getDate().toString().padStart(2, '0');   // Gün
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Ay (0-11 aralığında olduğu için 1 ekliyoruz)
+    const year = date.getFullYear(); // Yıl
+
+    return `${day}.${month}.${year}`;
+}

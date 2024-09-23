@@ -4,7 +4,8 @@ const initialState = {
     flightNumber: '',
     selectedAirport: '',
     selectedDate: '',
-    returnDate: ''
+    returnDate: '',
+    message:'',
 };
 
 const filterSlice = createSlice({
@@ -23,11 +24,15 @@ const filterSlice = createSlice({
         setReturnDate: (state, action) => {
             state.returnDate = action.payload;
         },
+        setMessage: (state, action) => {
+            state.message = action.payload;
+        },
         resetFilters: (state) => {
             state.flightNumber = '';
             state.selectedAirport = '';
             state.selectedDate = '';
             state.returnDate = '';
+            state.message = '';
         }
     }
 });
@@ -37,6 +42,7 @@ export const {
     setSelectedAirport,
     setSelectedDate,
     setReturnDate,
+    setMessage,
     resetFilters
 } = filterSlice.actions;
 

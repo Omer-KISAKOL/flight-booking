@@ -38,4 +38,12 @@ export const IataData = [
     { code: "SVQ", location: "Seville, Spain" },
     { code: "MJT", location: "Mytilene, Greece" },
     { code: "VNO", location: "Vilnius, Lithuania" },
+    { code: "BRI", location: "Bari, Italy" },
+    { code: "DLM", location: "Dalaman, Turkey" },
+    { code: "BJV", location: "Bodrum, Turkey" },
+    { code: "KGS", location: "Kos, Greece" },
+    { code: "NBE", location: "Enfidha, Tunisia" },
+    { code: "ACE", location: "Lanzarote, Spain" },
+    { code: "LEJ", location: "Leipzig, Germany" },
 ];
+// BRI, DLM, BJV, KGS, NBE ,ACE, LEJ

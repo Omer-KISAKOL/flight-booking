@@ -100,7 +100,6 @@ app.get('/api/schiphol-flights', async (req, res) => {
 
     // API isteği için URL oluşturma
     let url = `https://api.schiphol.nl/public-flights/flights?scheduleDate=${selectedDate}`;
-// &flight.route.destinations=${selectedAirport}
 
     if (flightNumber) {
         url += `&flightNumber=${flightNumber}`;

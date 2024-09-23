@@ -8,9 +8,12 @@ const Card = ({ image, icon, title }) => {
     return (
         <div className="relative w-full h-48 rounded-lg overflow-hidden shadow-lg">
             <img src={image} alt={title} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white">
-                <div className="text-4xl mb-2">{icon}</div>
-                <h2 className="text-xl font-bold">{title}</h2>
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-end items-baseline text-white">
+                <div className="px-6 py-2">
+                    <div className="text-4xl mb-2">{icon}</div>
+                    <h2 className="text-xl font-bold">{title}</h2>
+                </div>
+
             </div>
         </div>
     );
