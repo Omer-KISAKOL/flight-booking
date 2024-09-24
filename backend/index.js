@@ -44,6 +44,7 @@ const flightSchema = new mongoose.Schema({
     scheduleTime: String,                // Programlanmış saat
     serviceType: String,                  // Hizmet tipi
     terminal: Number,
+    randomPrice: Number,
 });
 
 const Flight = mongoose.model('Flight', flightSchema);

@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import "../index.css"
 import Filter from "../components/Filter.jsx";
 import Navbar from "../components/Navbar.jsx";
@@ -6,20 +6,21 @@ import Services from "../components/Services.jsx";
 import { useSelector , useDispatch } from 'react-redux';
 import { TbPlaneDeparture , TbPlaneArrival } from "react-icons/tb";
 import {IoIosAirplane} from "react-icons/io";
-import {convertToAmPm, FlightTimeDifference , extractTimeFromDateTime} from "../utils/timeUtils.jsx";
+import {convertToAmPm, FlightTimeDifference, extractTimeFromDateTime, formatDate} from "../utils/timeUtils.jsx";
 import turkish_airlines from "../assets/turkish-airlines.png";
 import {Link} from "react-router-dom";
 import {BookFlight} from "../components/BookFlight.jsx";
 import {FlightDetails} from "../components/FlightDetails.jsx";
 import { setMessage } from '../features/filterSlice.jsx';
+import { setFlights } from '../features/flightsSlice';
 
 function FlightsSchiphol({GetRouteInfo}) {
-    const [flight, setFlight] = useState([]);
     const [selectedFlight, setSelectedFlight] = useState(null);
     const [triggeredBy, setTriggeredBy] = useState(null);
 
     const dispatch = useDispatch();
     const filters = useSelector((state) => state.filters);
+    const flightsData = useSelector((state) => state.flights.flights);
 
     const handleBookClick = (flight) => {
         setSelectedFlight(flight);
@@ -49,8 +50,8 @@ function FlightsSchiphol({GetRouteInfo}) {
         fetch(`http://localhost:5000/api/schiphol-flights?${query}`)
             .then(response => response.json())
             .then(data => {
-                setFlight(data); // Schiphol API'den gelen uçuşları state'e koyuyoruz
-                console.log(data)
+                dispatch(setFlights(data)); // Schiphol API'den gelen uçuşları state'e koyuyoruz
+                console.log(flightsData)
             })
             .catch(error => console.error('Error fetching flights:', error));
 
@@ -146,8 +147,8 @@ function FlightsSchiphol({GetRouteInfo}) {
 
                     <div className="flex flex-col w-full md:w-9/12">
 
-                        {flight.length > 0 ? (
-                            flight.map((flight, index) => {
+                        {flightsData.length > 0 ? (
+                            flightsData.map((flight, index) => {
 
                                 // GetRouteInfo fonksiyonunu kullanarak varış lokasyonunu alıyoruz
                                 const destinations = flight.route.destinations;
@@ -160,7 +161,9 @@ function FlightsSchiphol({GetRouteInfo}) {
                                                 Amsterdam
                                                 - {transferAirport ? `Transfer via ${transferAirport} -> ` : ''}{finalDestination}
                                             </h3>
-                                            <div key={index} className="flex justify-between items-center">
+
+                                            <div className="flex justify-between items-center">
+
                                                 <div className="grid place-items-start">
                                                     <div className="flex gap-1 items-center">
                                                         <TbPlaneDeparture/>
@@ -170,13 +173,18 @@ function FlightsSchiphol({GetRouteInfo}) {
                                                         className="text-xl">{convertToAmPm(extractTimeFromDateTime(flight.scheduleDateTime))}</strong>
                                                     <p>Airport: AMS</p>
                                                 </div>
-                                                <div className="grid items-center place-items-center">
+
+                                                <div className="hidden sm:grid items-center place-items-center">
                                                     <img src={turkish_airlines} alt="turkish_airlines"
                                                          className="w-14"/>
                                                     <IoIosAirplane className="w-6 h-6 fill-purple-900"/>
-                                                    <span>{FlightTimeDifference(flight.scheduleDateTime, flight.estimatedLandingTime)} {flight.route.destinations.length === 1 ? (
-                                                        <span>(Nonstop)</span>) : (<span>(Via Transit)</span>)}</span>
+                                                    <span className="font-medium text-md">
+                                            {FlightTimeDifference(flight.scheduleDateTime, flight.estimatedLandingTime)} {flight.route.destinations.length === 1 ? (
+                                                        <span>(Nonstop)</span>) : (<span>(Via Transit)</span>)}
+                                        </span>
+                                                    <p className="text-lg font-medium mt-1.5">{formatDate(flight.scheduleDate)}</p>
                                                 </div>
+
                                                 <div className="grid place-items-start">
                                                     <div className="flex gap-1 items-center">
                                                         <TbPlaneArrival/>
@@ -186,15 +194,30 @@ function FlightsSchiphol({GetRouteInfo}) {
                                                         className="text-xl">{convertToAmPm(extractTimeFromDateTime(flight.estimatedLandingTime))}</strong>
                                                     <p>Airport: {flight.route.destinations.join(', ')}</p>
                                                 </div>
+
                                             </div>
+
+                                            <div className="flex justify-between sm:hidden items-center">
+                                                <img src={turkish_airlines} alt="turkish_airlines"
+                                                     className="w-20 h-8"/>
+                                                <span className="grid font-medium text-md">
+                                            <p>{FlightTimeDifference(flight.scheduleDateTime, flight.estimatedLandingTime)}</p>
+                                        <p>{flight.route.destinations.length === 1 ? (<span>(Nonstop)</span>) : (
+                                            <span>(Via Transit)</span>)}</p>
+                                        </span>
+                                                <p className="text-lg font-medium mt-1.5">{formatDate(flight.scheduleDate)}</p>
+                                            </div>
+
                                             <div className="flex justify-between items-center relative mt-8">
-                                                <p className="text-purple-500 text-lg font-bold">Price: $200</p>
+                                                <p className="text-purple-500 text-lg font-bold">Price:
+                                                    ${flight.randomPrice}</p>
                                                 <button
                                                     className="bg-purple-800 absolute -bottom-4 -right-4 text-white py-4 px-10 rounded-book"
                                                     onClick={() => handleBookClick(flight)}>
                                                     Book Flight
                                                 </button>
                                             </div>
+
                                         </div>
                                         <Link to='/' onClick={() => handleDetailsClick(flight)}
                                               className="text-purple-800 mb-6 underline w-44 h-10 bg-purple-200 text-center items-center rounded-b-lg">

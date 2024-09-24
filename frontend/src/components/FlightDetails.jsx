@@ -1,8 +1,8 @@
-import React, {useEffect} from "react";
-import {useSelector} from "react-redux";
+import React from "react";
+import { useSelector} from "react-redux";
 import {IoClose} from "react-icons/io5";
 import {TbPlaneArrival, TbPlaneDeparture} from "react-icons/tb";
-import {convertToAmPm, extractTimeFromDateTime, FlightTimeDifference} from "../utils/timeUtils.jsx";
+import {convertToAmPm, extractTimeFromDateTime, FlightTimeDifference, formatDate} from "../utils/timeUtils.jsx";
 import turkish_airlines from "../assets/turkish-airlines.png";
 import {IoIosAirplane} from "react-icons/io";
 import {Link} from "react-router-dom";
@@ -12,31 +12,42 @@ export const FlightDetails = ({ flight, onClose , handleFlightSubmit , transferA
 
     return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-8 rounded-lg w-[65%] shadow-lg relative">
+            <div className="bg-white p-8 rounded-lg w-[95%] sm:w-[65%] shadow-lg relative">
+
                 <button className="bg-transparent my-2 mx-4 rounded hover:text-red-800 absolute top-3 right-4"
                         onClick={onClose}>
                     <IoClose className="w-6 h-6"/>
                 </button>
+
                 <h2 className="text-xl font-bold mb-4">Flight Details</h2>
+
                 <div className="text-sm font-bold mb-2">
                     Amsterdam - {transferAirport ? ` Transfer via ${transferAirport} -> ` : ' '}{finalDestination}
                 </div>
+
                 <div className="flex justify-between items-center">
+
                     <div className="grid place-items-start">
                         <div className="flex gap-1 items-center">
                             <TbPlaneDeparture/>
                             <p>Departure</p>
                         </div>
-                        <strong className="text-xl">{convertToAmPm(extractTimeFromDateTime(flight.scheduleDateTime))}</strong>
+                        <strong
+                            className="text-xl">{convertToAmPm(extractTimeFromDateTime(flight.scheduleDateTime))}</strong>
                         <p>Airport: AMS</p>
                     </div>
-                    <div className="grid items-center place-items-center">
+
+                    <div className="hidden sm:grid items-center place-items-center">
                         <img src={turkish_airlines} alt="turkish_airlines"
                              className="w-14"/>
                         <IoIosAirplane className="w-6 h-6 fill-purple-900"/>
-                        <span>{FlightTimeDifference(flight.scheduleDateTime, flight.estimatedLandingTime)} {flight.route.destinations.length === 1 ? (
-                            <span>(Nonstop)</span>) : (<span>(Via Transit)</span>)}</span>
+                        <span className="font-medium text-md">
+                                            {FlightTimeDifference(flight.scheduleDateTime, flight.estimatedLandingTime)} {flight.route.destinations.length === 1 ? (
+                            <span>(Nonstop)</span>) : (<span>(Via Transit)</span>)}
+                                        </span>
+                        <p className="text-lg font-medium mt-1.5">{formatDate(flight.scheduleDate)}</p>
                     </div>
+
                     <div className="grid place-items-start">
                         <div className="flex gap-1 items-center">
                             <TbPlaneArrival/>
@@ -46,6 +57,18 @@ export const FlightDetails = ({ flight, onClose , handleFlightSubmit , transferA
                             className="text-xl">{convertToAmPm(extractTimeFromDateTime(flight.estimatedLandingTime))}</strong>
                         <p>Airport: {flight.route.destinations.join(', ')}</p>
                     </div>
+
+                </div>
+
+                <div className="flex justify-between sm:hidden items-center">
+                    <img src={turkish_airlines} alt="turkish_airlines"
+                         className="w-20 h-8"/>
+                    <span className="grid font-medium text-md">
+                                            <p>{FlightTimeDifference(flight.scheduleDateTime, flight.estimatedLandingTime)}</p>
+                                        <p>{flight.route.destinations.length === 1 ? (<span>(Nonstop)</span>) : (
+                                            <span>(Via Transit)</span>)}</p>
+                                        </span>
+                    <p className="text-lg font-medium mt-1.5">{formatDate(flight.scheduleDate)}</p>
                 </div>
 
                 {/* Buttons */}
@@ -55,9 +78,12 @@ export const FlightDetails = ({ flight, onClose , handleFlightSubmit , transferA
                         onClick={handleFlightSubmit}>
                         Confirm
                     </button>
-                    <div className="text-xl font-bold text-blue-600 absolute bottom-0 left-1/2 transition-opacity -ml-20 px-6 py-4 shadow-xl border-2 border-blue-600 rounded-2xl">
-                        {filters.message && <p>{filters.message}</p>}
-                    </div>
+                    {filters.message ? (
+                        <div
+                            className="text-xl font-bold text-white bg-blue-600 absolute bottom-0 left-1/2 transition-opacity -ml-20 px-6 py-4 shadow-xl border-2 border-blue-600 rounded-2xl">
+                            {filters.message && <p>{filters.message}</p>}
+                        </div>
+                    ) : (<></>)}
                     <div>
                         <Link
                             className="px-4 py-2 rounded-book border-2 border-purple-800 hover:bg-purple-800 hover:text-white"
