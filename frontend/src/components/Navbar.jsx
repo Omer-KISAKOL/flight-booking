@@ -19,7 +19,7 @@ function Navbar() {
         }
     };
     useEffect(() => {
-        // Event listener to close dropdown if clicked outside
+        // Event listener ile handleClickOutside yardımıyla başka bir yere tıklandığında Dropdown kapanacak.
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);

@@ -10,18 +10,17 @@ export const convertToAmPm = (time) => {
 };
 
 export const FlightTimeDifference = (scheduleDateTime,estimatedLandingTime) => {
-    // Uçağın kalkış ve tahmini varış zamanlarını belirleyelim
     const scheduleDateTimes = new Date(scheduleDateTime); // Kalkış zamanı
     const estimatedLandingTimes = new Date(estimatedLandingTime); // Tahmini varış zamanı
 
-    // İki zaman arasındaki farkı milisaniye cinsinden hesaplayalım
+    // İki zaman arasındaki farkı milisaniye cinsinden hesaplama
     const timeDifference = estimatedLandingTimes.getTime() - scheduleDateTimes.getTime();
 
-    // Bu farkı saat ve dakikaya çevirelim
+    // Bu farkı saat ve dakikaya çevirme
     const hours = Math.floor(timeDifference / (1000 * 60 * 60));
     const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
 
-    // Saat 0 ise sadece dakikaları gösterelim
+    // Saat 0 ise sadece dakikaları gösterme
     if (hours === 0) {
         return `${minutes}m`;
     }else if (estimatedLandingTime === undefined){
@@ -34,14 +33,14 @@ export const FlightTimeDifference = (scheduleDateTime,estimatedLandingTime) => {
 export const extractTimeFromDateTime = (dateTimeString) => {
     const date = new Date(dateTimeString);
 
-    // Saat, dakika ve saniyeyi alalım
+    // Saat, dakika ve saniyeyi alma
     const hours = date.getUTCHours().toString().padStart(2, '0');
     const minutes = date.getUTCMinutes().toString().padStart(2, '0');
 
     if (dateTimeString === undefined){
         return ('Unclear')
     }
-    // Saat formatında geri döndürelim
+
     return `${hours}:${minutes}`;
 };
 

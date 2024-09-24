@@ -46,7 +46,7 @@ function FlightsSchiphol({GetRouteInfo}) {
             selectedAirport: filters.selectedAirport,
         }).toString();
 
-        // Backend üzerinden Schiphol API'den uçuş verilerini çekiyoruz
+        // Backend üzerinden Schiphol API'den uçuş verilerini çekme
         fetch(`http://localhost:5000/api/schiphol-flights?${query}`)
             .then(response => response.json())
             .then(data => {
@@ -59,7 +59,7 @@ function FlightsSchiphol({GetRouteInfo}) {
 
     const handleFlightSubmit = async () => {
         try {
-            // Seçilen uçuşu backend'e POST ediyoruz
+            // Seçilen uçuşu backend'e POST etme
             const response = await fetch('http://localhost:5000/api/flights', {
                 method: 'POST',
                 headers: {
@@ -150,7 +150,7 @@ function FlightsSchiphol({GetRouteInfo}) {
                         {flightsData.length > 0 ? (
                             flightsData.map((flight, index) => {
 
-                                // GetRouteInfo fonksiyonunu kullanarak varış lokasyonunu alıyoruz
+                                // GetRouteInfo fonksiyonunu kullanarak varış lokasyonunu alma
                                 const destinations = flight.route.destinations;
                                 const {transferAirport, finalDestination} = GetRouteInfo(destinations);
 
@@ -272,11 +272,6 @@ function FlightsSchiphol({GetRouteInfo}) {
                                             })()
                                         )}
                                     </>
-                                    // Render HTML for "Check Details"
-                                    // <div>
-                                    //     <p>Flight Details:</p>
-                                    //     <strong>Check the details</strong>
-                                    // </div>
                                 )}
                             </div>
                         )}

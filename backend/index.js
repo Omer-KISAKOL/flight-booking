@@ -12,12 +12,12 @@ app.use(express.json());
 // CORS middleware'i, farklı domainlerden gelen isteklere izin verir.
 app.use(cors());
 
-// MongoDB'ye bağlanma. Burada MongoDB bağlantı URL'ini kendi Atlas URL'in ile değiştir.
+// MongoDB'ye bağlanma.
 mongoose.connect('mongodb+srv://okisakol:YvzccLo6kEGRG4gP@flight-booking.nrna4.mongodb.net/?retryWrites=true&w=majority&appName=Flight-Booking')
     .then(() => console.log('MongoDB connection successful.'))
     .catch((err) => console.error('MongoDB connection error:', err));
 
-// Uçuşlar için MongoDB şeması ve modeli
+// Uçuşlar için MongoDB şeması
 const flightSchema = new mongoose.Schema({
     flightNumber: String,                // Uçuş numarası
     flightName: String,                  // Uçuş adı
@@ -52,16 +52,13 @@ const Flight = mongoose.model('Flight', flightSchema);
 // Yeni bir uçuş kaydetmek için POST isteği
 app.post('/api/flights', async (req, res) => {
     try {
-        // İstekle gelen uçuş bilgilerini kullanarak yeni bir uçuş kaydediyoruz
         const flight = new Flight(req.body);
 
         // Uçuşu MongoDB veritabanına kaydediyoruz
         await flight.save();
 
-        // Başarılı olursa, başarı mesajı gönderiyoruz
         res.send('Flight save.');
     } catch (err) {
-        // Bir hata oluşursa, 400 durumu ve hata mesajı döndürüyoruz
         res.status(400).send('An ERROR has occurred.');
     }
 });
@@ -99,7 +96,6 @@ app.delete('/api/flights/:id', async (req, res) => {
 app.get('/api/schiphol-flights', async (req, res) => {
     const { selectedDate, selectedAirport, flightNumber } = req.query; // URL'deki parametreleri alıyoruz
 
-    // API isteği için URL oluşturma
     let url = `https://api.schiphol.nl/public-flights/flights?scheduleDate=${selectedDate}`;
 
     if (flightNumber) {
@@ -109,8 +105,8 @@ app.get('/api/schiphol-flights', async (req, res) => {
     try {
         const apiResponse = await fetch(url, {
             headers: {
-                'app_id': '938aaf8b', // Schiphol API App ID'nizi buraya ekleyin
-                'app_key': '70bbf8a9ecbb19f14e1828981d511ea8', // Schiphol API Key'inizi buraya ekleyin
+                'app_id': '938aaf8b', // Schiphol API App ID burada
+                'app_key': '70bbf8a9ecbb19f14e1828981d511ea8', // Schiphol API Key buraya
                 'ResourceVersion': 'v4',
                 'Accept': 'application/json'
             }

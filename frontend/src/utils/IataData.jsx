@@ -46,4 +46,3 @@ export const IataData = [
     { code: "ACE", location: "Lanzarote, Spain" },
     { code: "LEJ", location: "Leipzig, Germany" },
 ];
-// BRI, DLM, BJV, KGS, NBE ,ACE, LEJ
