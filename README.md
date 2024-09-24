@@ -1,6 +1,6 @@
 # Flight Booking Application
 
-This project is a simple web application that lists flights using the Schiphol airport API and allows users to make flight reservations. The frontend is developed with React, and the backend is built with Node.js and MongoDB.
+This project is a simple web application where flights are listed using the Schiphol airport API, and users can make flight reservations. The project is developed using React for the frontend and Node.js with MongoDB for the backend.
 
 ## Table of Contents
 - [About the Project](#about-the-project)
@@ -14,94 +14,105 @@ This project is a simple web application that lists flights using the Schiphol a
 ---
 
 ## About the Project
-This application allows users to view flight information, filter flights by date and direction, make reservations, and list their past flights. The project aims to provide a clean and modern design. The design strictly adheres to the provided mockups, and consistency between pages is ensured.
+This application is designed to display flight information, filter by dates and directions, allow users to book flights, list users' previous flights, and show total price information. The project aims to provide a simple and modern design.
 
 ### Technologies Used:
 - **React** (Frontend)
 - **Node.js** (Backend)
 - **MongoDB** (Database)
-- **CSS**:
+- **Tailwind CSS**: Styling is done using a simple, modern structure.
 
 ---
 
 ## Features
-1. Flights are listed using the Schiphol API.
-2. Flights can be filtered by date and direction.
-3. Users can make flight reservations and view their saved flights.
-4. Reservations cannot be made for past flights (with a validation check).
+1. List flights using the Schiphol API.
+2. Filter flights by date and direction.
+3. Users can make flight reservations and view their flights in chronological order.
+4. Restrictions on booking past flights.
+5. Users can view the total cost of their flights.
 
 ---
 
 ## Minimum Requirements
-- **Node.js**: Version 14.x or above
-- **MongoDB**: A working MongoDB instance is required.
-- **pnpm**: For package management (Yarn can be used as an alternative).
+- **Node.js**: 16.x or higher
+- **pnpm**: Required for package management
 
 ---
 
 ## Installation
 
-Follow these steps to set up the project:
+Follow these steps to set up and run the project:
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/username/flight-reservation-app.git
-    cd flight-reservation-app
+    git clone https://github.com/Omer-KISAKOL/flight-booking.git
+    cd flight-booking
     ```
 
-2. **Install dependencies**:
+2. **Install frontend dependencies**:
     ```bash
+    cd frontend
     pnpm install
     ```
 
-3. **Add API keys**: Create an account at Schiphol Flight API and get your `Application Id` and `Application Key`. Then, create a `.env` file in the project root and add your API keys like this:
+3. **Install backend dependencies**:
     ```bash
-    REACT_APP_API_ID=yourApplicationId
-    REACT_APP_API_KEY=yourApplicationKey
+    cd backend
+    pnpm install
     ```
 
-4. **Start MongoDB**:
-   Make sure your MongoDB instance is running. For a local MongoDB setup:
+4. **Start the backend**:
     ```bash
-    mongod --dbpath /your/local/dbpath
+    cd backend
+    node index.js
     ```
 
-5. **Start the project**:
+5. **Start the frontend**:
     ```bash
-    pnpm start
+    cd frontend
+    pnpm run dev
     ```
 
 ---
 
 ## Usage
 
-1. **Flight List**: The homepage displays a list of flights fetched from the API.
-2. **Flight Filtering**: Flights can be filtered by date and direction.
-3. **Making Reservations**: Users can select a flight and make a reservation, which will be saved in MongoDB.
-4. **My Flights**: Displays a list of the user's past flights.
+1. **Flight Filtering**: Filter flights by date and direction.
+2. **Flight List**: Flights pulled from the API are listed on the homepage.
+3. **Making Reservations**: Select a flight to make a reservation and save it to MongoDB.
+4. **My Flights**: View all flights belonging to the user.
 
 ---
 
 ## Screenshots
 
 ### Homepage
-![Homepage Screenshot](screenshots/homepage.png)
+![Homepage Screen](screenshots/anasayfa.png)
+![Homepage Screen](screenshots/anasayfa1.png)
+![Homepage Screen](screenshots/anasayfa2.png)
+![Homepage Screen](screenshots/anasayfa3.png)
+![Homepage Screen](screenshots/anasayfa4.png)
 
 ### My Flights Page
-![My Flights Screenshot](screenshots/myflights.png)
+![My Flights Screen](screenshots/ucuslarim.png)
+![My Flights Screen](screenshots/ucuslarim1.png)
+![My Flights Screen](screenshots/ucuslarim2.png)
 
 ---
 
 ## Developer Notes
 
-### Styling:
-- **CSS**: The style files are created using plain and modern CSS. No external CSS libraries were used.
-- **Responsive Design**: The design is responsive and mobile-friendly.
+- **Flight times**: There are some issues with the data returned by the API, resulting in "-" values for the time difference calculation.
 
-### Future Enhancements:
-- **Additional flight filters** could be added for more advanced search options.
-- **User authentication** could be implemented for a personalized experience.
-- **Animations and visual enhancements** could be added for better user interaction.
+### Styling:
+- **CSS**: Style files are organized to maintain a clean and modern structure. Tailwind CSS framework has been used externally.
+- **Responsive Design**: The page is developed with a flexible structure to be mobile-friendly.
+
+### Future Improvements:
+- Additional **filtering options** for flight information can be added.
+- **User login/logout** functionality can be integrated.
+- **Animations and visual enhancements** can be applied.
+
 
 ---
 
@@ -123,28 +134,28 @@ Bu proje, Schiphol havalimanı API'sini kullanarak uçuşların listelendiği ve
 ---
 
 ## Proje Hakkında
-Bu uygulama, uçuş bilgilerini görüntülemek, tarih ve yönlere göre filtrelemek, rezervasyon yapmak ve kullanıcıların önceki uçuşlarını listelemek için tasarlanmıştır. Proje, sade ve modern bir tasarım sunmayı hedeflemiştir. Verilen görsellere birebir uyum sağlanmıştır ve sayfalar arasında stil tutarlılığı korunmuştur.
+Bu uygulama, uçuş bilgilerini görüntülemek, tarih ve yönlere göre filtrelemek, rezervasyon yapmak, kullanıcıların önceki uçuşlarını listelemek ve toplam fiyat bilgisini göstermek için tasarlanmıştır. Proje, sade ve modern bir tasarım sunmayı hedeflemiştir.
 
 ### Kullanılan Teknolojiler:
 - **React** (Frontend)
 - **Node.js** (Backend)
 - **MongoDB** (Veritabanı)
-- **CSS**: Stil düzenlemeleri sade, modern bir yapı kullanılarak yapılmıştır. Harici bir kütüphane kullanılmamıştır. (Opsiyonel: **CSS framework** ya da **Styled Components** gibi kütüphaneler kullanılabilir.)
+- **Tailwind CSS**: Stil düzenlemeleri sade, modern bir yapı kullanılarak yapılmıştır.
 
 ---
 
 ## Özellikler
 1. Schiphol API'si kullanılarak uçuşlar listelenir.
 2. Uçuşlar tarih ve yönlere göre filtrelenebilir.
-3. Kullanıcı uçuş rezervasyonu yapabilir ve uçuşlarını görüntüleyebilir.
+3. Kullanıcı uçuş rezervasyonu yapabilir ve uçuşlarını kronolojik sıra ile görüntüleyebilir.
 4. Geçmiş tarihli uçuşlar için rezervasyon kısıtlaması bulunur.
+5. Kullanıcı uçuşlarının toplam tutarlarını görüntüleyebilir.
 
 ---
 
 ## Minimum Gereksinimler
-- **Node.js**: 14.x ve üzeri
-- **MongoDB**: Veritabanı için kurulmuş olması gerekli.
-- **pnpm**: Paket yönetimi için gerekli (alternatif olarak Yarn kullanılabilir).
+- **Node.js**: 16.x ve üzeri
+- **pnpm**: Paket yönetimi için gerekli.
 
 ---
 
@@ -154,57 +165,66 @@ Projeyi çalıştırmak için aşağıdaki adımları takip edin:
 
 1. **Depoyu klonlayın**:
     ```bash
-    git clone https://github.com/kullaniciAdi/ucus-rezervasyon-uygulamasi.git
-    cd ucus-rezervasyon-uygulamasi
+    git clone https://github.com/Omer-KISAKOL/flight-booking.git
+    cd flight-booking
     ```
 
-2. **Gerekli bağımlılıkları yükleyin**:
+2. **Frontend için gerekli bağımlılıkları yükleyin**:
     ```bash
+    cd frontend
+    pnpm install
+    ```
+   
+3. **Backend için gerekli bağımlılıkları yükleyin**:
+    ```bash
+    cd backend
     pnpm install
     ```
 
-3. **API anahtarlarını ekleyin**: Schiphol Flight API için bir hesap oluşturup `Application Id` ve `Application Key` bilgilerinizi alın. Ardından, projenin kök dizininde `.env` dosyasını oluşturup şu şekilde API anahtarlarını ekleyin:
+4. **Backend'i başlatın**:
     ```bash
-    REACT_APP_API_ID=yourApplicationId
-    REACT_APP_API_KEY=yourApplicationKey
+    cd backend
+    node index.js
     ```
 
-4. **Veritabanını başlatın**:
-   MongoDB'inizin çalıştığından emin olun. Geliştirme ortamında lokal MongoDB kullanıyorsanız:
+5. **Frontend'i başlatın**:
     ```bash
-    mongod --dbpath /your/local/dbpath
-    ```
-
-5. **Proje'yi başlatın**:
-    ```bash
-    pnpm start
+    cd frontend
+    pnpm run dev
     ```
 
 ---
 
 ## Kullanım
 
-1. **Uçuş Listesi**: Anasayfada API'den çekilen uçuş bilgileri listelenir.
-2. **Uçuş Filtreleme**: Tarih ve hareket yönüne göre uçuşları filtreleyebilirsiniz.
+1. **Uçuş Filtreleme**: Tarih ve hareket yönüne göre uçuşları filtreleyebilirsiniz.
+2. **Uçuş Listesi**: Anasayfada API'den çekilen uçuş bilgileri listelenir.
 3. **Rezervasyon Yapma**: Uçuş seçerek rezervasyon yapabilir ve MongoDB'ye kaydedebilirsiniz.
-4. **Uçuşlarım**: Kullanıcıya ait geçmiş uçuşlar görüntülenir.
+4. **Uçuşlarım**: Kullanıcıya ait tüm uçuşlar görüntülenir.
 
 ---
 
 ## Ekran Görüntüleri
 
 ### Anasayfa
-![Anasayfa Ekranı](screenshots/homepage.png)
-
+![Anasayfa Ekranı](screenshots/anasayfa.png)
+![Anasayfa Ekranı](screenshots/anasayfa1.png)
+![Anasayfa Ekranı](screenshots/anasayfa2.png)
+![Anasayfa Ekranı](screenshots/anasayfa3.png)
+![Anasayfa Ekranı](screenshots/anasayfa4.png)
 ### Uçuşlarım Sayfası
-![Uçuşlarım Ekranı](screenshots/myflights.png)
+![Uçuşlarım Ekranı](screenshots/ucuslarim.png)
+![Uçuşlarım Ekranı](screenshots/ucuslarim1.png)
+![Uçuşlarım Ekranı](screenshots/ucuslarim2.png)
 
 ---
 
 ## Geliştirici Notları
 
+- **Uçuş saatleri**: API dan gelen veriler ile ilgili problem olduğundan aradaki zaman hesabı "-" li değerler alabiliyor.
+
 ### Stil Yönetimi:
-- **CSS**: Stil dosyaları sade, modern bir yapıya sahip olacak şekilde düzenlenmiştir. Harici bir CSS kütüphanesi kullanılmamış, standart **CSS** ile stil düzenlemeleri yapılmıştır.
+- **CSS**: Stil dosyaları sade, modern bir yapıya sahip olacak şekilde düzenlenmiştir. Harici olarak Tailwind css kütüphanesi kullanılmıştır.
 - **Responsive Tasarım**: Sayfa mobil uyumlu olacak şekilde esnek yapıda geliştirilmiştir.
 
 ### Gelecekteki Geliştirmeler:
